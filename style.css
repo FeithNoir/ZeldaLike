@@ -1,0 +1,314 @@
+/* --- Tus clases de Layout --- */
+.row,
+.column {
+  display: flex;
+  align-items: flex-start; /* Alinea arriba para que no se centren verticalmente */
+  justify-content: center;
+  gap: 20px;
+  width: 100%; /* Ocupa el ancho disponible */
+  flex-wrap: wrap; /* Permite que se apilen si no caben */
+}
+
+.column {
+  flex-direction: column;
+  align-items: center; /* Centra elementos en la columna */
+}
+/* -------------------------- */
+
+body {
+  font-family: "Arial", sans-serif;
+  display: flex;
+  flex-direction: column; /* Mantenemos columna para el H1 y el .row */
+  align-items: center;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+  overflow: hidden;
+}
+
+#game-area {
+  /* Contenedor opcional si quieres añadir más cosas alrededor del juego */
+}
+
+#game-container {
+  width: 512px;
+  height: 448px;
+  border: 2px solid #333;
+  background-color: #8fbc8f;
+  position: relative;
+  overflow: hidden;
+  /* margin-bottom quitado, el gap de .row lo gestiona */
+}
+
+/* --- HUD --- */
+#hud {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 25; /* Encima de casi todo */
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+#hud-hp .heart {
+  color: red;
+  margin-left: 2px;
+}
+#hud-hp .heart.empty {
+  color: #555; /* Corazón vacío */
+}
+#hud-key {
+  font-size: 18px;
+}
+
+#level-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+
+#player {
+  width: 32px;
+  height: 32px;
+  background-color: #32cd32;
+  border: 1px solid #228b22;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  box-sizing: border-box;
+  z-index: 10;
+  transition: opacity 0.15s linear; /* Para parpadeo al recibir daño */
+}
+
+/* Clase para invencibilidad visual */
+#player.hit-invincible {
+  opacity: 0.6;
+}
+
+#player::before {
+  /* Indicador dirección */
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: black;
+  border-radius: 50%;
+}
+#player[data-facing="down"]::before {
+  top: 24px;
+  left: 13px;
+}
+#player[data-facing="up"]::before {
+  top: 2px;
+  left: 13px;
+}
+#player[data-facing="left"]::before {
+  top: 13px;
+  left: 2px;
+}
+#player[data-facing="right"]::before {
+  top: 13px;
+  left: 24px;
+}
+
+/* --- Espada (Barrido - sin cambios) --- */
+#sword {
+  position: absolute;
+  background-color: rgba(192, 192, 192, 0.8);
+  border: 1px solid #808080;
+  box-sizing: border-box;
+  display: none;
+  z-index: 15;
+  border-radius: 5px;
+  transform-origin: center center;
+}
+#player.attacking[data-facing="down"] #sword {
+  display: block;
+  width: 48px;
+  height: 20px;
+  top: 28px;
+  left: -8px;
+}
+#player.attacking[data-facing="up"] #sword {
+  display: block;
+  width: 48px;
+  height: 20px;
+  top: -16px;
+  left: -8px;
+}
+#player.attacking[data-facing="left"] #sword {
+  display: block;
+  width: 20px;
+  height: 48px;
+  top: -8px;
+  left: -16px;
+}
+#player.attacking[data-facing="right"] #sword {
+  display: block;
+  width: 20px;
+  height: 48px;
+  top: -8px;
+  left: 28px;
+}
+
+/* --- Objetos Interactuables --- */
+.interactable {
+  width: 24px;
+  height: 24px;
+  background-color: #ffd700; /* Llave por defecto */
+  border: 1px solid #daa520;
+  position: absolute;
+  cursor: pointer;
+  box-sizing: border-box;
+  z-index: 8;
+}
+.interactable.near {
+  box-shadow: 0 0 10px 3px yellow;
+}
+/* Específico para la llave (si quisiéramos diferenciarla) */
+.interactable.key {
+  /* Podríamos cambiar el background-image aquí si usamos sprites */
+}
+
+/* --- Puertas --- */
+.door {
+  position: absolute;
+  background-color: #8b4513; /* Marrón puerta */
+  border: 2px solid #4a2a13;
+  box-sizing: border-box;
+  z-index: 7; /* Detrás de interactuables normales */
+  cursor: pointer;
+}
+.door.locked::after {
+  /* Indicador visual de bloqueada */
+  content: "🔒";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: gold;
+}
+.door.near {
+  /* Resaltado para puertas */
+  box-shadow: 0 0 10px 3px cyan;
+}
+
+/* --- Obstáculos --- */
+.obstacle {
+  position: absolute;
+  background-color: #a0522d;
+  border: 1px solid #8b4513;
+  box-sizing: border-box;
+}
+
+/* --- Enemigos --- */
+.enemy {
+  width: 30px;
+  height: 30px;
+  background-color: #dc143c; /* Rojo */
+  border: 1px solid #8b0000;
+  position: absolute;
+  box-sizing: border-box;
+  transition: background-color 0.1s linear;
+}
+.enemy.hit {
+  background-color: #ff6347;
+}
+/* Estilos específicos por patrón si se quiere */
+.enemy[data-pattern="chase"] {
+  background-color: #ff4500; /* Naranja para Chase */
+  border-color: #cc3700;
+}
+.enemy[data-pattern="square_patrol"] {
+  background-color: #da70d6; /* Orquídea para Patrol */
+  border-color: #a354a0;
+}
+
+/* --- Área de mensajes --- */
+#message-area {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  z-index: 30; /* Encima de casi todo menos game over */
+  display: none;
+}
+
+/* --- Instrucciones --- */
+.instructions {
+  /* margin-top quitado */
+  padding: 20px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-width: 300px; /* Ancho máximo para las instrucciones */
+  text-align: left;
+  align-self: flex-start; /* Asegura que se alinee arriba en el .row */
+}
+.instructions h2 {
+  margin-top: 0;
+}
+.instructions ul {
+  list-style: none;
+  padding-left: 0;
+}
+.instructions li {
+  margin-bottom: 5px;
+}
+
+/* --- Transición de Fundido (Fade) --- */
+#fade-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0;
+  z-index: 50; /* Por encima de todo */
+  pointer-events: none; /* No interfiere con clicks/input */
+  transition: opacity 0.4s ease-in-out;
+}
+#fade-overlay.active {
+  opacity: 1;
+  pointer-events: all; /* Bloquea input durante el fade */
+}
+
+/* --- Game Over --- */
+#game-over {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100; /* ¡Lo más alto! */
+  font-size: 3em;
+  text-align: center;
+}
+#game-over button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 0.5em;
+  cursor: pointer;
+}

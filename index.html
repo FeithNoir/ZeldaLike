@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Zelda SNES - Nivel 3</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Mini Aventura Zelda-like v3</h1>
+
+    <!-- Contenedor principal usando tu clase .row -->
+    <div class="row">
+      <!-- Columna del Juego -->
+      <div id="game-area">
+        <div id="game-container">
+          <!-- HUD (Heads-Up Display) para HP -->
+          <div id="hud">
+            <div id="hud-hp">
+              HP: <span class="heart">♥</span><span class="heart">♥</span
+              ><span class="heart">♥</span>
+            </div>
+            <div id="hud-key" style="display: none">🔑</div>
+          </div>
+
+          <!-- Contenedor para elementos dinámicos (obstáculos, enemigos, puertas) -->
+          <div id="level-elements">
+            <!-- Se añadirán aquí con JS -->
+          </div>
+
+          <!-- El jugador (nuestro héroe) -->
+          <div id="player" data-facing="down">
+            <div id="sword"></div>
+            <!-- La espada para el ataque -->
+          </div>
+
+          <!-- Overlay para transiciones de fundido -->
+          <div id="fade-overlay"></div>
+
+          <!-- Zona de mensajes -->
+          <div id="message-area"></div>
+        </div>
+      </div>
+
+      <!-- Columna de Instrucciones -->
+      <div class="instructions">
+        <h2>¡A Jugar!</h2>
+        <p><strong>Controles:</strong></p>
+        <ul>
+          <li>Flechas / WASD: Moverse</li>
+          <li>Espacio: Atacar (Barrido)</li>
+          <li>E: Interactuar (Puertas, Objetos)</li>
+          <!-- <li>R: Cambiar de sala (¡Test!)</li> Quitamos R -->
+        </ul>
+        <p>¡Encuentra la llave y escapa!</p>
+      </div>
+    </div>
+    <!-- Fin de .row -->
+
+    <script src="script.js"></script>
+  </body>
+</html>
